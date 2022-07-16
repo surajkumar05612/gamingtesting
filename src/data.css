@@ -1,0 +1,38 @@
+.header{
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header input{
+    width: 20rem;
+    height: 2.5rem;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    padding-left: 2rem;
+    font-size: 1rem;
+    color: #ffffff;
+    background: url("./assets/search.png")no-repeat left;
+    background-size: 25px;
+    box-shadow: 20px 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.header .socials{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.header .socials a{
+    color: #ffffff;
+    font-size: 1.8rem;
+    transition: all 0.3s ease;
+}
+
+.header .socials a:hover{
+    transform: scale(1.2);
+    color: #1082ed;
+}
