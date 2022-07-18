@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import "./data.css";
 import { FaInstagram } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
@@ -8,6 +8,9 @@ import mainimg from "./assets/main.png";
 
 function Data () {
     const [apiData, setData] = useState([]);
+    const [text, setText] = useState(' ');
+    const [gameName, setName] = useState([]);
+    const [suggestions, setSuggestions] = useState([]);
 
     const fetchData = () =>{
         fetch("https://s3-ap-southeast-1.amazonaws.com/he-public-data/gamesarena274f2bf.json")
@@ -16,6 +19,7 @@ function Data () {
         }).then((data)=> {
             data.shift();
             setData(data);
+            setName(data);
             // console.log(data);
         })
     }
@@ -23,11 +27,11 @@ function Data () {
     useEffect(()=> {
         fetchData();
     }, [])
-    
+
     // popular games sorting and display
     const popular = [];
     
-    apiData.map(function(object, i){
+    apiData.map(function(object){
         if(object.score >= 9.2){
             popular.push(object);
         }
@@ -41,6 +45,28 @@ function Data () {
 
     function compareScoreDesending(a, b){
         return b.score - a.score;
+    }
+
+    function dataAscend() {
+        apiData.sort(compareScoreAscending);
+        setData(apiData);
+        console.log("hello");
+        console.log(apiData);
+    }
+
+    // sorting games on alphabetical order
+    function compareName(a, b){
+        const name1 = a.title.toUpperCase();
+        const name2 = b.title.toUpperCase();
+
+        let comparison = 0;
+
+        if(name1 > name2){
+            comparison = 1;
+        } else if(name1 < name2){
+            comparison = -1;
+        }
+        return comparison;
     }
 
     //displaying popular games data 
@@ -85,11 +111,31 @@ function Data () {
         </div>
     })
 
+    const onChangeHandler = (text) => {
+        let matches = [];
+        if(text.length > 0){
+            matches = gameName.filter(name => {
+                const regex = new RegExp(`${text}`, "gi");
+                return name.title.match(regex)
+            })
+        }
+        console.log(matches)
+        setSuggestions(matches);
+        setText(text)
+    }
+ 
     return(
         <>
             <div className="header">
                 <div>
-                    <input type="text" placeholder="Search"></input>
+                    <input type="text" placeholder="Search"
+                     onChange={e => onChangeHandler(e.target.value)}
+                     value={text}/>
+                     {suggestions && suggestions.map((suggestions, i) => 
+                        <div className="suggestion" key={i}>
+                            {suggestions.title}
+                        </div>
+                     )}
                 </div>
                 <div className="socials">
                     <a href="https://www.instagram.com/surajkumarjena.005612/" target="blank"><FaInstagram /></a>
@@ -118,7 +164,16 @@ function Data () {
                 </div>
             </div>
             <div className="section2" id="section2">
-                <h2>Explore The Game Of Your Choice !</h2>
+                <div className="top">
+                    <h2>Explore The Game Of Your Choice !</h2>
+                    <div className="dropdown">
+                        <ul>
+                            <li>Sort By Alphabet</li>
+                            <li onClick={dataAscend}>Sort By Ascending Score</li>
+                            <li>Sort By Descending Score</li>
+                        </ul>
+                    </div>
+                </div>
                 <div className="gamelist-parent">
                     {gameCard}
                 </div>
