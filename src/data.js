@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./data.css";
 import { FaInstagram } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
@@ -50,13 +50,21 @@ function Data () {
         return b.score - a.score;
     }
 
+    // functions for sorting data
     const dataAscend =() => {
-        
-        console.log(apiData)
-        setData(apiData)
+        apiData.sort(compareScoreAscending)
+        setData([...apiData]);
     }
 
-    apiData.sort(compareName);
+    const dataDescend = () => {
+        apiData.sort(compareScoreDesending);
+        setData([...apiData]);
+    }
+
+    const dataAlphabet = () => {
+        apiData.sort(compareName);
+        setData([...apiData]);
+    }
 
     // sorting games on alphabetical order
     function compareName(a, b){
@@ -134,7 +142,7 @@ function Data () {
     const searchedData = [];
     const onSearchHandler = () => {
         apiData.map(function(object){
-            if(object.title == inputValue){
+            if(object.title === inputValue){
                 searchedData.push(object);
             }
         });
@@ -189,9 +197,9 @@ function Data () {
                     <h2>Explore The Game Of Your Choice !</h2>
                     <div className="dropdown">
                         <ul>
-                            <li>Sort By Alphabet</li>
+                            <li onClick={() => dataAlphabet()}>Sort By Alphabet</li>
                             <li onClick={() => dataAscend()}>Sort By Ascending Score</li>
-                            <li>Sort By Descending Score</li>
+                            <li onClick={() => dataDescend()}>Sort By Descending Score</li>
                         </ul>
                     </div>
                 </div>
