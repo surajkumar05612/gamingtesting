@@ -38,8 +38,11 @@ function Data () {
         if(object.score >= 9.2){
             popular.push(object);
         }
+        popular.shift();
+
+        
     });
-    popular.shift();
+    
 
     // sorting games on score ascending and descending
     function compareScoreAscending(a, b){
