@@ -47,11 +47,9 @@ function Data () {
         return b.score - a.score;
     }
 
-    function dataAscend() {
+    const dataAscend =(apiData) => {
         apiData.sort(compareScoreAscending);
         setData(apiData);
-        console.log("hello");
-        console.log(apiData);
     }
 
     // sorting games on alphabetical order
@@ -115,13 +113,18 @@ function Data () {
         let matches = [];
         if(text.length > 0){
             matches = gameName.filter(name => {
-                const regex = new RegExp(`${text}`, "gi");
+                const regex = new RegExp(`${text}`, `gi`);
                 return name.title.match(regex)
             })
         }
         console.log(matches)
         setSuggestions(matches);
         setText(text)
+    }
+
+    const onSuggestHandler = (text) => {
+        setText(text);
+        setSuggestions([]);
     }
  
     return(
@@ -131,11 +134,15 @@ function Data () {
                     <input type="text" placeholder="Search"
                      onChange={e => onChangeHandler(e.target.value)}
                      value={text}/>
+                     <div className="suggestion-parent">
                      {suggestions && suggestions.map((suggestions, i) => 
-                        <div className="suggestion" key={i}>
+                        <div className="suggestion" key={i}
+                        onClick={()=>onSuggestHandler(suggestions.title)}>
                             {suggestions.title}
                         </div>
                      )}
+                     </div>
+                     <button type="submit">Search</button>
                 </div>
                 <div className="socials">
                     <a href="https://www.instagram.com/surajkumarjena.005612/" target="blank"><FaInstagram /></a>
@@ -169,7 +176,7 @@ function Data () {
                     <div className="dropdown">
                         <ul>
                             <li>Sort By Alphabet</li>
-                            <li onClick={dataAscend}>Sort By Ascending Score</li>
+                            <li onClick={() => dataAscend(apiData)}>Sort By Ascending Score</li>
                             <li>Sort By Descending Score</li>
                         </ul>
                     </div>
