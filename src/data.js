@@ -38,10 +38,10 @@ function Data () {
         if(object.score >= 9.2){
             popular.push(object);
         }
-        popular.shift();
-
-        
+        return 1;
     });
+
+    popular.shift();
     
 
     // sorting games on score ascending and descending
@@ -148,7 +148,8 @@ function Data () {
             if(object.title === inputValue){
                 searchedData.push(object);
             }
-        });
+            return 1;
+        })
         console.log(searchedData);
     }
  
