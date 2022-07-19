@@ -12,6 +12,9 @@ function Data () {
     const [gameName, setName] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
 
+    // DOM elements
+    const inputValue = text;
+
     const fetchData = () =>{
         fetch("https://s3-ap-southeast-1.amazonaws.com/he-public-data/gamesarena274f2bf.json")
         .then((response)=> {
@@ -47,10 +50,13 @@ function Data () {
         return b.score - a.score;
     }
 
-    const dataAscend =(apiData) => {
-        apiData.sort(compareScoreAscending);
-        setData(apiData);
+    const dataAscend =() => {
+        
+        console.log(apiData)
+        setData(apiData)
     }
+
+    apiData.sort(compareName);
 
     // sorting games on alphabetical order
     function compareName(a, b){
@@ -103,12 +109,10 @@ function Data () {
             <div className="editorschoice">
                 Editors Choice : <span>{object.editors_choice}</span>
             </div>
-            <div className="add-btn">
-                <button type="submit">Add to List</button>
-            </div>
         </div>
     })
 
+    // autocomplete feature during search
     const onChangeHandler = (text) => {
         let matches = [];
         if(text.length > 0){
@@ -117,7 +121,6 @@ function Data () {
                 return name.title.match(regex)
             })
         }
-        console.log(matches)
         setSuggestions(matches);
         setText(text)
     }
@@ -125,6 +128,17 @@ function Data () {
     const onSuggestHandler = (text) => {
         setText(text);
         setSuggestions([]);
+    }
+
+    // searching via name
+    const searchedData = [];
+    const onSearchHandler = () => {
+        apiData.map(function(object){
+            if(object.title == inputValue){
+                searchedData.push(object);
+            }
+        });
+        console.log(searchedData);
     }
  
     return(
@@ -142,7 +156,7 @@ function Data () {
                         </div>
                      )}
                      </div>
-                     <button type="submit">Search</button>
+                     <button type="submit" onClick={()=> onSearchHandler()}>Search</button>
                 </div>
                 <div className="socials">
                     <a href="https://www.instagram.com/surajkumarjena.005612/" target="blank"><FaInstagram /></a>
@@ -176,7 +190,7 @@ function Data () {
                     <div className="dropdown">
                         <ul>
                             <li>Sort By Alphabet</li>
-                            <li onClick={() => dataAscend(apiData)}>Sort By Ascending Score</li>
+                            <li onClick={() => dataAscend()}>Sort By Ascending Score</li>
                             <li>Sort By Descending Score</li>
                         </ul>
                     </div>
